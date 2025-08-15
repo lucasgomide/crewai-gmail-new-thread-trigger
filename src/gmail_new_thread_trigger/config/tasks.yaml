@@ -1,33 +1,43 @@
 email_analysis_task:
   description: >
-    Retrieve and analyze the email using the following parameters:
-    - Message ID: {message_id}
-    - To Email: {to_email}
+    Parse and analyze the complete Gmail payload provided in: {crewai_trigger_payload}
 
-    Use the GMAIL_GET_EMAIL_BY_ID tool to retrieve the email content by message ID.
-    Once you have retrieved the email, carefully extract and identify the following:
+    The payload contains a Gmail message with the following structure:
+    - result.id: Message ID
+    - result.payload.headers[]: Array of email headers with name/value pairs
+    - result.payload.parts[]: Array of message body parts (text/plain, text/html)
 
-    IMPORTANT: Pay special attention to the email headers:
-    1. Extract the sender information from the "from" header field
-    2. Extract the subject line from the "Subject" header field
-    3. Extract the recipient information from the "to" header field
-    4. The main purpose/intent of the email body
-    5. Key information and important details from the message content
-    6. Any action items or requests mentioned
-    7. The tone and urgency level
-    8. Important dates, numbers, or references
-    9. The full message body content
+    IMPORTANT: Extract the following information from the payload structure:
 
-    Make sure to clearly distinguish between header information (sender, subject, recipients)
-    and the actual message body content.
+    1. From the headers array (result.payload.headers), find headers with these names:
+       - "From": sender email address and name
+       - "Subject": email subject line
+       - "To": recipient information
+       - "Date": email timestamp
+       - "Message-ID": unique message identifier
+
+    2. From the parts array (result.payload.parts), extract and decode message body:
+       - Find parts with mimeType "text/plain" or "text/html"
+       - Decode the base64 encoded body.data content to readable text
+       - Prefer text/plain over text/html for readability
+
+    3. Analyze the decoded message content for:
+       - Main purpose/intent of the email
+       - Key information and important details from the message
+       - Any action items or requests mentioned
+       - Tone and urgency level
+       - Important dates, numbers, or references
+
+    Make sure to clearly distinguish between header information and decoded message body content.
   expected_output: >
     A structured analysis containing:
     - Email Headers:
-      * Sender (from "from" header): [email address and name]
-      * Subject (from "Subject" header): [subject line]
-      * Recipients (from "to" header): [recipient information]
-      * Message ID: {message_id}
-    - Message Body Content: [full email body text]
+      * Message ID (from result.id): [Gmail message ID]
+      * From (from "From" header): [sender email address and name]
+      * Subject (from "Subject" header): [email subject line]
+      * To (from "To" header): [recipient information]
+      * Date (from "Date" header): [email timestamp]
+    - Decoded Message Body: [full decoded email text from parts array]
     - Main purpose/intent of the email
     - Key information extracted from the content
     - Action items identified
@@ -37,24 +47,25 @@ email_analysis_task:
 
 email_summarization_task:
   description: >
-    Based on the email analysis from the retrieved Gmail message, create a comprehensive summary that includes:
-    - The sender information extracted from the "from" header
-    - The subject line extracted from the "Subject" header
-    - A clear overview of the email's main message content
-    - Key points and important information
-    - Any action items or next steps
+    Based on the email analysis from the parsed Gmail payload, create a comprehensive summary that includes:
+    - The sender information extracted from the "From" header in the payload
+    - The subject line extracted from the "Subject" header in the payload
+    - The decoded and analyzed message content from the email body parts
+    - Key points and important information from the analysis
+    - Any action items or next steps identified
     - Assessment of priority/urgency
 
-    IMPORTANT: Ensure the sender (from "from" header) and subject (from "Subject" header)
+    IMPORTANT: Ensure the sender (from "From" header) and subject (from "Subject" header)
     are displayed prominently at the top of your summary. These are critical pieces of
-    information that must be clearly visible.
+    information that must be clearly visible for quick email identification.
   expected_output: >
     A well-structured email summary in markdown format containing:
-    - **Message ID**: The Gmail message ID ({message_id})
-    - **From**: Sender email address and name (extracted from "from" header)
+    - **Message ID**: Gmail message ID (from result.id in payload)
+    - **From**: Sender email address and name (extracted from "From" header)
     - **Subject**: The email subject line (extracted from "Subject" header)
-    - **To**: Recipient information (extracted from "to" header)
-    - **Message Content**: The full email message body
+    - **To**: Recipient information (extracted from "To" header)
+    - **Date**: Email timestamp (extracted from "Date" header)
+    - **Message Content**: The full decoded email message body
     - **Summary**: Concise overview of the main message
     - **Key Points**: Bullet points of important information
     - **Action Items**: Any tasks or requests mentioned

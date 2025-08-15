@@ -41,20 +41,24 @@ This example, unmodified, will create an `email_summary.md` file with a comprehe
 
 ## Gmail Input Format
 
-The crew expects the following inputs:
-- `message_id`: Gmail message ID to retrieve the email
-- `to_email`: Recipient email address
+The crew expects the following input:
+- `crewai_trigger_payload`: Complete Gmail payload JSON containing the email data
 
-The crew uses CrewAI Enterprise Tools with the GMAIL_GET_EMAIL_BY_ID action to automatically retrieve email content including sender, subject, and message body.
+The payload includes:
+- `result.id`: Gmail message ID
+- `result.payload.headers[]`: Array of email headers (From, Subject, To, Date, etc.)
+- `result.payload.parts[]`: Array of message body parts with base64 encoded content
+
+The crew automatically parses this payload to extract sender, subject, and decoded message content.
 
 ## Understanding Your Crew
 
 The Gmail Email Summarization Crew is composed of two specialized AI agents:
 
-1. **Gmail Email Retriever and Analyzer**: Uses CrewAI Enterprise Tools to retrieve emails from Gmail by message ID and analyzes the content to extract key information, action items, and assess tone/urgency
-2. **Email Summarizer**: Creates clear, structured summaries including sender information, subject, message content, key points, and action items
+1. **Gmail Payload Parser and Analyzer**: Parses Gmail API payload structures to extract header information (sender, subject, recipients) and decode base64 message body content for analysis
+2. **Email Summarizer**: Creates clear, structured summaries prominently displaying sender and subject information, along with message content, key points, and action items
 
-These agents collaborate sequentially to provide comprehensive email retrieval, analysis, and summarization directly from Gmail.
+These agents collaborate sequentially to provide comprehensive email parsing, analysis, and summarization from Gmail payload data.
 
 ## Support
 
