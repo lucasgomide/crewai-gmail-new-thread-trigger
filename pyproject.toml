@@ -1,0 +1,24 @@
+[project]
+name = "gmail_new_thread_trigger"
+version = "0.1.0"
+description = "gmail-new-thread-trigger using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "celery[redis]>=5.5.3",
+    "crewai[tools]>=0.152.0,<1.0.0",
+]
+
+[project.scripts]
+gmail_new_thread_trigger = "gmail_new_thread_trigger.main:run"
+run_crew = "gmail_new_thread_trigger.main:run"
+train = "gmail_new_thread_trigger.main:train"
+replay = "gmail_new_thread_trigger.main:replay"
+test = "gmail_new_thread_trigger.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

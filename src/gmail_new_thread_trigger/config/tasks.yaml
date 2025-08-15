@@ -1,0 +1,48 @@
+email_analysis_task:
+  description: >
+    Analyze the received email with the following details:
+    - Subject: {subject}
+    - From: {from_email}
+    - To: {to_email}
+    - Base64 Content: {content_base64}
+
+    If needed, you can use the Base64 Decoder tool to decode the content_base64
+    to get the readable email content for analysis.
+
+    Extract and identify:
+    1. The main purpose/intent of the email
+    2. Key information and important details
+    3. Any action items or requests mentioned
+    4. The tone and urgency level
+    5. Important dates, numbers, or references
+    6. The sender's relationship context based on from_email
+  expected_output: >
+    A structured analysis containing:
+    - Email metadata (from, to, subject)
+    - Main purpose/intent
+    - Key information extracted
+    - Action items identified
+    - Tone and urgency assessment
+    - Important details (dates, numbers, references)
+  agent: email_analyzer
+
+email_summarization_task:
+  description: >
+    Based on the email analysis, create a comprehensive summary that includes:
+    - A clear overview of the email's main message
+    - Key points and important information
+    - Any action items or next steps
+    - Relevant context about the sender ({from_email})
+    - Assessment of priority/urgency
+
+    Make sure to include the sender information prominently in your summary.
+  expected_output: >
+    A well-structured email summary in markdown format containing:
+    - **Sender**: {from_email}
+    - **Subject**: {subject}
+    - **Summary**: Concise overview of the main message
+    - **Key Points**: Bullet points of important information
+    - **Action Items**: Any tasks or requests mentioned
+    - **Priority**: Assessment of urgency/importance
+    Formatted as clean markdown without code blocks
+  agent: email_summarizer
