@@ -39,22 +39,22 @@ This command initializes the gmail-new-thread-trigger Crew, assembling the agent
 
 This example, unmodified, will create an `email_summary.md` file with a comprehensive summary of the analyzed email.
 
-## Email Input Format
+## Gmail Input Format
 
 The crew expects the following inputs:
-- `subject`: Email subject line
+- `message_id`: Gmail message ID to retrieve the email
 - `to_email`: Recipient email address
-- `from_email`: Sender email address (included prominently in the summary)
-- `content_base64`: Base64 encoded email content
+
+The crew uses CrewAI Enterprise Tools with the GMAIL_GET_EMAIL_BY_ID action to automatically retrieve email content including sender, subject, and message body.
 
 ## Understanding Your Crew
 
 The Gmail Email Summarization Crew is composed of two specialized AI agents:
 
-1. **Email Analyzer**: Analyzes email content to extract key information, action items, and assess tone/urgency
-2. **Email Summarizer**: Creates clear, structured summaries including sender information, key points, and action items
+1. **Gmail Email Retriever and Analyzer**: Uses CrewAI Enterprise Tools to retrieve emails from Gmail by message ID and analyzes the content to extract key information, action items, and assess tone/urgency
+2. **Email Summarizer**: Creates clear, structured summaries including sender information, subject, message content, key points, and action items
 
-These agents collaborate sequentially to provide comprehensive email analysis and summarization.
+These agents collaborate sequentially to provide comprehensive email retrieval, analysis, and summarization directly from Gmail.
 
 ## Support
 

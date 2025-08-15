@@ -1,26 +1,35 @@
 email_analysis_task:
   description: >
-    Analyze the received email with the following details:
-    - Subject: {subject}
-    - From: {from_email}
-    - To: {to_email}
-    - Base64 Content: {content_base64}
+    Retrieve and analyze the email using the following parameters:
+    - Message ID: {message_id}
+    - To Email: {to_email}
 
-    If needed, you can use the Base64 Decoder tool to decode the content_base64
-    to get the readable email content for analysis.
+    Use the GMAIL_GET_EMAIL_BY_ID tool to retrieve the email content by message ID.
+    Once you have retrieved the email, carefully extract and identify the following:
 
-    Extract and identify:
-    1. The main purpose/intent of the email
-    2. Key information and important details
-    3. Any action items or requests mentioned
-    4. The tone and urgency level
-    5. Important dates, numbers, or references
-    6. The sender's relationship context based on from_email
+    IMPORTANT: Pay special attention to the email headers:
+    1. Extract the sender information from the "from" header field
+    2. Extract the subject line from the "Subject" header field
+    3. Extract the recipient information from the "to" header field
+    4. The main purpose/intent of the email body
+    5. Key information and important details from the message content
+    6. Any action items or requests mentioned
+    7. The tone and urgency level
+    8. Important dates, numbers, or references
+    9. The full message body content
+
+    Make sure to clearly distinguish between header information (sender, subject, recipients)
+    and the actual message body content.
   expected_output: >
     A structured analysis containing:
-    - Email metadata (from, to, subject)
-    - Main purpose/intent
-    - Key information extracted
+    - Email Headers:
+      * Sender (from "from" header): [email address and name]
+      * Subject (from "Subject" header): [subject line]
+      * Recipients (from "to" header): [recipient information]
+      * Message ID: {message_id}
+    - Message Body Content: [full email body text]
+    - Main purpose/intent of the email
+    - Key information extracted from the content
     - Action items identified
     - Tone and urgency assessment
     - Important details (dates, numbers, references)
@@ -28,21 +37,29 @@ email_analysis_task:
 
 email_summarization_task:
   description: >
-    Based on the email analysis, create a comprehensive summary that includes:
-    - A clear overview of the email's main message
+    Based on the email analysis from the retrieved Gmail message, create a comprehensive summary that includes:
+    - The sender information extracted from the "from" header
+    - The subject line extracted from the "Subject" header
+    - A clear overview of the email's main message content
     - Key points and important information
     - Any action items or next steps
-    - Relevant context about the sender ({from_email})
     - Assessment of priority/urgency
 
-    Make sure to include the sender information prominently in your summary.
+    IMPORTANT: Ensure the sender (from "from" header) and subject (from "Subject" header)
+    are displayed prominently at the top of your summary. These are critical pieces of
+    information that must be clearly visible.
   expected_output: >
     A well-structured email summary in markdown format containing:
-    - **Sender**: {from_email}
-    - **Subject**: {subject}
+    - **Message ID**: The Gmail message ID ({message_id})
+    - **From**: Sender email address and name (extracted from "from" header)
+    - **Subject**: The email subject line (extracted from "Subject" header)
+    - **To**: Recipient information (extracted from "to" header)
+    - **Message Content**: The full email message body
     - **Summary**: Concise overview of the main message
     - **Key Points**: Bullet points of important information
     - **Action Items**: Any tasks or requests mentioned
     - **Priority**: Assessment of urgency/importance
-    Formatted as clean markdown without code blocks
+
+    Ensure the From and Subject fields are prominently displayed at the top and
+    formatted as clean markdown without code blocks.
   agent: email_summarizer
