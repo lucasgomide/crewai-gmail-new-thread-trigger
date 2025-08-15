@@ -22,3 +22,11 @@ build-backend = "hatchling.build"
 
 [tool.crewai]
 type = "crew"
+
+[tool.uv.workspace]
+members = [
+    "crewAI-enterprise",
+]
+
+[tool.uv.sources]
+crewai = { workspace = true }

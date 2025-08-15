@@ -1,6 +1,6 @@
 email_analysis_task:
   description: >
-    Parse and analyze the complete Gmail payload provided in: {crewai_trigger_payload}
+    Parse and analyze the complete Gmail payload provided in: {CREWAI_TRIGGER_PAYLOAD}
 
     The payload contains a Gmail message with the following structure:
     - result.id: Message ID
