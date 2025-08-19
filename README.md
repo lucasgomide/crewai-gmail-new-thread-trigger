@@ -41,9 +41,6 @@ This example, unmodified, will create an `email_summary.md` file with a comprehe
 
 ## Gmail Input Format
 
-The crew expects the following input:
-- `crewai_trigger_payload`: Complete Gmail payload JSON containing the email data
-
 The payload includes:
 - `result.id`: Gmail message ID
 - `result.payload.headers[]`: Array of email headers (From, Subject, To, Date, etc.)
